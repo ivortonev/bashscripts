@@ -1,0 +1,31 @@
+#!/bin/sh
+# \
+exec /usr/bin/expect -- "$0" ${1+"$@"}
+
+exp_version -exit 5.0
+
+if {$argc==0} {
+    send_user "usage: $argv0 host username password keyfile\n\n"
+    send_user "host            - ip / dns hostname\n"
+    send_user "username        - ssh username\n"
+    send_user "password        - ssh password\n"
+    send_user "keyfile         - ssh public key file\n"
+    exit
+}
+
+set HOST [lindex $argv 0]
+set ANSUSER [lindex $argv 1]
+set ANSPASSWORD [lindex $argv 2]
+set ANSSSHKEYFILE [lindex $argv 3]
+set timeout 40
+
+match_max 20000
+
+spawn ssh-copy-id -i $ANSSSHKEYFILE $ANSUSER@$HOST
+
+expect "password:"
+send "$ANSPASSWORD\r"
+
+expect {
+    "password:" {send -- "$ANSPASSWORD\r"; exp_continue}
+}
