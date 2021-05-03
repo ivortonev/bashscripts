@@ -1,0 +1,52 @@
+#!/bin/sh
+# \
+exec /usr/bin/expect -- "$0" ${1+"$@"}
+
+exp_version -exit 5.0
+
+if {$argc==0} {
+    send_user "usage: $argv0 host port username password newusername newuserpasswd newusergrp\n\n"
+    send_user "host            - ip / dns hostname\n"
+    send_user "port            - ssh port\n"
+    send_user "username        - ssh username\n"
+    send_user "password        - ssh password\n"
+    send_user "newusername     - new user name\n"
+    send_user "newuserpasswd   - new user password\n"
+    send_user "newusergrp      - new user group\n"
+    exit
+}
+
+set HOST [lindex $argv 0]
+set PORT [lindex $argv 1]
+set USERNAME [lindex $argv 2]
+set PASSWORD [lindex $argv 3]
+set NEWUSERNAME [lindex $argv 4]
+set NEWUSERPASSWD [lindex $argv 5]
+set NEWUSERGRP [lindex $argv 6]
+
+set timeout 60
+
+spawn ssh -p $PORT $USERNAME@$HOST
+
+expect "password: "
+send "$PASSWORD\r"
+expect "$ "
+send "sudo su -\r"
+expect ": "
+send "$PASSWORD\r"
+expect "# "
+send "/usr/sbin/adduser $NEWUSERNAME -g $NEWUSERGRP\r"
+expect "# "
+send "/usr/bin/passwd $NEWUSERNAME\r"
+expect "d:"
+send "$NEWUSERPASSWD\r"
+expect "d:"
+send "$NEWUSERPASSWD\r"
+expect "# "
+send "/usr/bin/id $NEWUSERNAME \r"
+expect "# "
+send "exit\r"
+expect "# "
+send "exit\r"
+expect "$ "
+send "exit\r"
