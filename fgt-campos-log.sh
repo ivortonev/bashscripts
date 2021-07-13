@@ -4,12 +4,12 @@ FILE=$1
 
 LINHA1=`head -n 1 $FILE`
 
-LINHA2=`echo $LINHA1 | sed -e 's/,/\ /g'`
+LINHA2=`echo $LINHA1 | sed -e 's/\ /_/g' | sed -e 's/,/\ /g'`
 
 COUNT=1
 
 for i in $LINHA2 ; do
-	VALOR=`echo $i | cut -f 2 -d "\"" | cut -f 1 -d "="`
+	VALOR=`echo $i | cut -f 1 -d "=" | cut -f 2 -d "\""`
 
 	if [ -z $VALOR ] ; then
 		VALOR=ZZZZ
@@ -59,5 +59,6 @@ do
   DSTPORT=`echo "$line" | cut -f $VAL_DSTPORT -d ","`
   SRCIP=`echo "$line" | cut -f $VAL_SRCIP -d ","`
   SRCPORT=`echo "$line" | cut -f $VAL_SRCPORT -d ","`
-  echo "$SRCIP:$SRCPORT:$DSTIP:$DSTPORT:$APP:$ACTION" >> $1.sorted.csv
+  echo "$SRCIP:$SRCPORT:$DSTIP:$DSTPORT:$APP:$ACTION" >> $1.sorted22.csv
 done < "$input"
+
