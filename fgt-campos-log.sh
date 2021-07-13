@@ -59,6 +59,5 @@ do
   DSTPORT=`echo "$line" | cut -f $VAL_DSTPORT -d ","`
   SRCIP=`echo "$line" | cut -f $VAL_SRCIP -d ","`
   SRCPORT=`echo "$line" | cut -f $VAL_SRCPORT -d ","`
-  echo "$SRCIP:$SRCPORT:$DSTIP:$DSTPORT:$APP:$ACTION" >> $1.sorted22.csv
+  echo "$SRCIP:$SRCPORT:$DSTIP:$DSTPORT:$APP:$ACTION" >> $1.sorted.csv
 done < "$input"
-
