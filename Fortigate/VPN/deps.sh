@@ -12,3 +12,6 @@ for i in /usr/bin/expect /usr/bin/mktemp /usr/bin/cat /usr/bin/grep /usr/bin/cut
 	fi
 done
 
+chmod 755 *sh
+chmod 755 *exp
+chmod 600 *cfg
