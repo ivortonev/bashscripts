@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 for i in `/usr/bin/grep ^CMD variaveis.cfg  | /usr/bin/cut -f 2 -d "\""` ; do
 	if [ -f $i ] ; then
 		echo "$i ok"
