@@ -16,6 +16,6 @@ spawn ssh -p $FW_PORT $FW_USERNAME@$FW_HOST
 expect "password:"
 send "$FW_PASSWORD\r"
 expect "#"
-send "show firewall address | grep -i $VPN_USER \r"
+send "show firewall address $VPN_USER \r"
 expect "#"
 send "quit \r"

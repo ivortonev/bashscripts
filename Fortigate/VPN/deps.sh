@@ -15,4 +15,3 @@ done
 chmod 755 *sh
 chmod 755 *exp
 chmod 600 *cfg
-
