@@ -16,6 +16,7 @@ spawn ssh -p $FW_PORT $FW_USERNAME@$FW_HOST
 expect "password:"
 send "$FW_PASSWORD\r"
 expect "#"
+log_user 1
 send "show firewall schedule onetime $VPN_USER \r"
 expect "#"
 send "quit \r"
