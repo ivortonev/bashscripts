@@ -4,7 +4,6 @@
 . ./variaveis.cfg
 
 # O nome de usuario no AD pode ser ate 20 caracteres
-#AD_USERNAME=`$CMD_ECHO $1 | $CMD_TR [A-Z] [a-z] | $CMD_SED 's/[^0-9a-z]*//g' | $CMD_CUT -c 1-$MAX_CHARS`
 AD_USERNAME=`$CMD_ECHO $1 | $CMD_TR [A-Z] [a-z] | $CMD_CUT -c 1-$MAX_CHARS`
 
 # Verificacao da data final
@@ -84,7 +83,8 @@ FW_VPN_ADDRESS_NAME_DEFAULT="wks_$VPN_USERNAME"
 		$CMD_ECHO "Nome do schedule encontrado : $FW_VPN_SCHEDULE_NAME"
 		$CMD_ECHO ""
 		if [ $FW_VPN_SCHEDULE_NAME != $FW_VPN_SCHEDULE_NAME_DEFAULT ] ; then
-			$CMD_ECHO "Nome do objeto de schedule diferente do padrao. Renomeando para $FW_VPN_SCHEDULE_NAME_DEFAULT"
+			STEP=$(($STEP+1))
+			$CMD_ECHO "[$STEP]Nome do objeto de schedule diferente do padrao. Renomeando para $FW_VPN_SCHEDULE_NAME_DEFAULT"
 		$CMD_ECHO ""
 			./$SCRIPT_CFG_EDIT_SCHEDULE_NAME $FW_HOST $FW_PORT $FW_USERNAME $FW_PASSWORD $FW_VPN_SCHEDULE_NAME $FW_VPN_SCHEDULE_NAME_DEFAULT
 		fi
@@ -94,6 +94,7 @@ FW_VPN_ADDRESS_NAME_DEFAULT="wks_$VPN_USERNAME"
 		SCHEDULE_DATE_END=`$CMD_CAT $TMP_DIR/schedule_extended | $CMD_GREP "set end" | $CMD_CUT -f 2 -d "\"" | $CMD_TAIL -n 1 | $CMD_HEAD -n 1 | $CMD_CUT -f 2 -d ":" | $CMD_CUT -f 2 -d " " | $CMD_TR -d '[:cntrl:]' `
 		if [ "$SCHEDULE_DATE_END" != "$DATE_END" ] ; then
 			$CMD_ECHO "Alterando a data final da VPN para $VRF_DIA/$VRF_MES/$VRF_ANO"
+			$CMD_ECHO ""
 			./$SCRIPT_CFG_EDIT_SCHEDULE_DATE  $FW_HOST $FW_PORT $FW_USERNAME $FW_PASSWORD $FW_VPN_SCHEDULE_NAME_DEFAULT $DEF_DATE_START $DATE_END
 		else
 			$CMD_ECHO "Data final $VRF_DIA/$VRF_MES/$VRF_ANO"
@@ -114,8 +115,10 @@ FW_VPN_ADDRESS_NAME_DEFAULT="wks_$VPN_USERNAME"
 		$CMD_ECHO "Nome do objeto de estacao encontrado: $FW_VPN_ADDRESS_NAME"
 		$CMD_ECHO ""
 		if [ $FW_VPN_ADDRESS_NAME != $FW_VPN_ADDRESS_NAME_DEFAULT ] ; then
-			$CMD_ECHO "Nome do objeto de objeto de estacao diferente do padrao. Renomeando para $FW_VPN_ADDRESS_NAME_DEFAULT"
+			STEP=$(($STEP+1))
+			$CMD_ECHO "[$STEP]Nome do objeto de objeto de estacao diferente do padrao. Renomeando para $FW_VPN_ADDRESS_NAME_DEFAULT"
 			./$SCRIPT_CFG_EDIT_ADDRESS_NAME $FW_HOST $FW_PORT $FW_USERNAME $FW_PASSWORD $FW_VPN_ADDRESS_NAME $FW_VPN_ADDRESS_NAME_DEFAULT
+			$CMD_ECHO ""
 		fi
 		STEP=$(($STEP+1))
 		$CMD_ECHO -n "[$STEP]Verificando o ip da estacao de trabalho ... "
